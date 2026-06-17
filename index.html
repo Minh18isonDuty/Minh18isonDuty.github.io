@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nguyen Ngoc Minh — Software Tester Intern</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0F2A4A;
+    --accent: #2563EB;
+    --accent-light: #EAF1FF;
+    --muted: #64748B;
+    --bg: #F5F7FB;
+    --card: #FFFFFF;
+    --border: #E6EAF1;
+    --green: #16A34A;
+    --green-bg: #ECFDF3;
+    --red: #DC2626;
+    --red-bg: #FEF2F2;
+    --amber: #D97706;
+    --amber-bg: #FFF7ED;
+    --purple: #7C3AED;
+    --purple-bg: #F3EEFF;
+    --sidebar-w: 240px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--navy);
+    background: var(--bg);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .app { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 18px;
+    z-index: 200;
+    transition: transform 0.25s ease;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px 24px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .brand-mark {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--navy));
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+  }
+  .brand-text { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--navy); }
+  .brand-text small { display: block; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+
+  .nav-list { list-style: none; display: flex; flex-direction: column; gap: 2px; flex: 1; }
+  .nav-list a {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .nav-list a svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .nav-list a:hover { background: var(--accent-light); color: var(--accent); text-decoration: none; }
+  .nav-list a.active { background: var(--accent); color: #fff; }
+
+  .sidebar-cta {
+    margin-top: 16px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 11px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .sidebar-cta:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+
+  .sidebar-social { display: flex; gap: 10px; margin-top: 18px; padding: 0 8px; }
+  .sidebar-social a {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+  }
+  .sidebar-social a:hover { background: var(--accent-light); color: var(--accent); }
+  .sidebar-social svg { width: 16px; height: 16px; }
+
+  .menu-toggle {
+    display: none;
+    position: fixed;
+    top: 16px; right: 16px;
+    z-index: 300;
+    width: 42px; height: 42px;
+    border-radius: 8px;
+    background: var(--navy);
+    color: #fff;
+    align-items: center; justify-content: center;
+    border: none;
+  }
+
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    padding: 32px 36px 64px;
+    max-width: 1180px;
+  }
+
+  .hero-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 44px 40px;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 24px;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .hero-card h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    letter-spacing: -0.02em;
+    color: var(--navy);
+    line-height: 1.1;
+  }
+  .hero-role {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--accent);
+    margin-top: 6px;
+  }
+  .hero-card p.lead {
+    margin-top: 16px;
+    color: var(--muted);
+    max-width: 480px;
+    font-size: 0.96rem;
+  }
+  .hero-actions { display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 20px;
+    border-radius: 9px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    border: 1px solid var(--border);
+  }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: var(--navy); border-color: var(--navy); text-decoration: none; }
+  .btn-ghost { color: var(--navy); background: var(--card); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+
+  .hero-tags { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+  .hero-tags span {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.82rem; font-weight: 500;
+    padding: 7px 12px;
+    background: var(--bg);
+    border-radius: 7px;
+    color: var(--navy);
+  }
+
+  .hero-visual { display: flex; align-items: center; justify-content: center; }
+  .hero-visual svg { width: 100%; max-width: 280px; }
+
+  .card-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 32px 36px;
+    margin-bottom: 24px;
+  }
+  .card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 26px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .card-head h2 {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+  }
+  .card-head h2 svg { width: 20px; height: 20px; color: var(--accent); }
+  .card-head .view-all { font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+
+  .about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: start; }
+  .about-grid p { color: var(--muted); margin-bottom: 12px; font-size: 0.94rem; }
+  .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .stat-box { border: 1px solid var(--border); border-radius: 12px; padding: 18px 14px; text-align: center; }
+  .stat-icon { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+  .stat-icon svg { width: 18px; height: 18px; }
+  .stat-icon.blue { background: var(--accent-light); color: var(--accent); }
+  .stat-icon.red { background: var(--red-bg); color: var(--red); }
+  .stat-icon.purple { background: var(--purple-bg); color: var(--purple); }
+  .stat-icon.amber { background: var(--amber-bg); color: var(--amber); }
+  .stat-box .stat-value { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.3rem; color: var(--navy); }
+  .stat-box .stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+  .skills-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; }
+  .skill-row { margin-bottom: 18px; }
+  .skill-row:last-child { margin-bottom: 0; }
+  .skill-row .skill-top { display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 600; color: var(--navy); margin-bottom: 7px; }
+  .skill-row .skill-top span.level { color: var(--accent); font-weight: 600; }
+  .bar-track { height: 7px; background: var(--bg); border-radius: 99px; overflow: hidden; }
+  .bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #5B8DEF); border-radius: 99px; width: 0%; transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1); }
+
+  .tools-box { border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+  .tools-box h3 { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 16px; }
+  .tool-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; font-size: 0.88rem; font-weight: 500; border-bottom: 1px solid var(--border); }
+  .tool-item:last-child { border-bottom: none; }
+  .tool-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+  .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .project-card { border: 1px solid var(--border); border-radius: 14px; padding: 22px; transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; }
+  .project-card:hover { border-color: var(--accent); box-shadow: 0 10px 28px -14px rgba(15,42,74,0.22); transform: translateY(-2px); }
+  .project-icon { width: 44px; height: 44px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 14px; }
+  .project-top-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .project-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600; padding: 4px 8px; border-radius: 6px; white-space: nowrap; }
+  .project-tag.academic { background: var(--amber-bg); color: var(--amber); }
+  .project-tag.personal { background: var(--accent-light); color: var(--accent); }
+  .project-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.02rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .project-stack { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--muted); margin-bottom: 12px; }
+  .project-card .desc { font-size: 0.86rem; color: var(--muted); margin-bottom: 14px; }
+  .project-meta { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+  .project-meta span { display: flex; align-items: center; gap: 7px; font-size: 0.82rem; color: var(--navy); font-weight: 500; }
+  .project-meta svg { width: 14px; height: 14px; color: var(--green); flex-shrink: 0; }
+  .project-card .view-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.83rem; font-weight: 600; padding: 8px 14px; border: 1px solid var(--border); border-radius: 7px; color: var(--navy); }
+  .project-card .view-link:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+
+  .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+  .resource-card { border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .resource-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+  .resource-icon svg { width: 18px; height: 18px; }
+  .resource-card h4 { font-size: 0.92rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .resource-card p { font-size: 0.82rem; color: var(--muted); margin-bottom: 14px; }
+  .resource-link { font-size: 0.82rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 7px; }
+  .resource-link.green { background: var(--green-bg); color: var(--green); }
+  .resource-link.red { background: var(--red-bg); color: var(--red); }
+  .resource-link.amber { background: var(--amber-bg); color: var(--amber); }
+  .resource-link.blue { background: var(--accent-light); color: var(--accent); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px; }
+  @media (max-width: 980px) { .two-col, .about-grid, .skills-grid, .hero-card { grid-template-columns: 1fr; } .hero-visual { display: none; } }
+
+  .bug-ticket { border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+  .bug-ticket-top { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .bug-id { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; background: var(--red-bg); color: var(--red); padding: 3px 8px; border-radius: 5px; }
+  .bug-ticket h4 { font-size: 0.92rem; font-weight: 700; color: var(--navy); }
+  .bug-field { display: flex; gap: 6px; font-size: 0.84rem; margin-bottom: 8px; align-items: baseline; }
+  .bug-field .label { font-weight: 600; color: var(--muted); min-width: 86px; flex-shrink: 0; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  .bug-field .value { color: var(--navy); }
+  .status-pill { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 0.76rem; font-weight: 600; background: var(--green-bg); color: var(--green); }
+
+  .stlc-track { display: flex; justify-content: space-between; position: relative; flex-wrap: wrap; gap: 18px 0; }
+  .stlc-step { flex: 1; min-width: 90px; text-align: center; position: relative; }
+  .stlc-step::after { content: ''; position: absolute; top: 19px; left: calc(50% + 24px); right: calc(-50% + 24px); height: 2px; background: var(--border); }
+  .stlc-step:last-child::after { display: none; }
+  .stlc-icon { width: 38px; height: 38px; border-radius: 50%; background: var(--accent-light); color: var(--accent); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; position: relative; z-index: 2; font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 0.78rem; }
+  .stlc-step .step-name { font-size: 0.78rem; font-weight: 600; color: var(--navy); line-height: 1.3; }
+
+  .contact-card { background: linear-gradient(135deg, var(--navy), #1B3A63); border-radius: 18px; padding: 40px; color: #fff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+  .contact-card h2 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+  .contact-card p { opacity: 0.8; font-size: 0.9rem; max-width: 380px; }
+  .contact-info { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; font-size: 0.86rem; }
+  .contact-info span { display: flex; align-items: center; gap: 6px; opacity: 0.9; }
+  .contact-socials { display: flex; gap: 10px; }
+  .contact-socials a { width: 42px; height: 42px; border-radius: 10px; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; color: #fff; }
+  .contact-socials a:hover { background: rgba(255,255,255,0.22); }
+  .contact-socials svg { width: 18px; height: 18px; }
+
+  .footer-note { text-align: center; font-size: 0.78rem; color: var(--muted); margin-top: 28px; font-family: 'JetBrains Mono', monospace; }
+
+  @media (max-width: 880px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; padding: 24px 18px 48px; }
+    .menu-toggle { display: flex; }
+    .hero-card { padding: 28px 22px; }
+    .card-section { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<div class="app">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">MN</div>
+      <div class="brand-text">Minh QA<small>Software Tester</small></div>
+    </div>
+    <ul class="nav-list">
+      <li><a href="#home" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>Home</a></li>
+      <li><a href="#about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>About</a></li>
+      <li><a href="#skills"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>Skills</a></li>
+      <li><a href="#projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Projects</a></li>
+      <li><a href="#qa-portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>QA Portfolio</a></li>
+      <li><a href="#bug-showcase"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="6" width="8" height="12" rx="4"/><path d="M12 2v4M8 9H4M8 14H4M16 9h4M16 14h4M9 6l-1.5-2M15 6l1.5-2"/></svg>Bug Showcase</a></li>
+      <li><a href="#stlc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Testing Process</a></li>
+      <li><a href="#education"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>Education</a></li>
+      <li><a href="#contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>Contact</a></li>
+    </ul>
+    <a class="sidebar-cta" href="Nguyen_Ngoc_Minh_CV.pdf" target="_blank" rel="noopener">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v14m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
+      Download CV
+    </a>
+    <div class="sidebar-social">
+      <a href="https://github.com/minh18notexist" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.25.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.7 2.6 1.2 3.2.9.1-.7.4-1.2.7-1.5-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2.9-.3 1.9-.4 2.9-.4s2 .1 2.9.4c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .35.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.65 18.35.5 12 .5z"/></svg></a>
+      <a href="https://www.linkedin.com/in/minh-nguyen-ngoc-6241b3354/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5a5 5 0 00-5 5v14a5 5 0 005 5h14a5 5 0 005-5V5a5 5 0 00-5-5zM8 19H5V9h3zM6.5 7.7A1.7 1.7 0 118.2 6a1.7 1.7 0 01-1.7 1.7zM20 19h-3v-5.4c0-1.3-.5-2.2-1.6-2.2-.9 0-1.4.6-1.6 1.2-.1.2-.1.5-.1.8V19h-3s.1-9 0-10h3v1.4c.4-.6 1.1-1.5 2.8-1.5 2 0 3.5 1.3 3.5 4.2z"/></svg></a>
+      <a href="mailto:anosvoldigodx123@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></a>
+    </div>
+  </aside>
+
+  <main class="main" id="home">
+
+    <section class="hero-card">
+      <div>
+        <div class="eyebrow">● Hello, I'm</div>
+        <h1>Nguyen Ngoc Minh</h1>
+        <div class="hero-role">Software Tester Intern</div>
+        <p class="lead">Computer Science student with a strong interest in software testing and quality assurance. I enjoy finding defects, improving user experience, and making sure software works as expected before it reaches users.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://github.com/minh18notexist" target="_blank" rel="noopener">View My Work <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-ghost" href="Nguyen_Ngoc_Minh_CV.pdf" target="_blank" rel="noopener">Download CV <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3v13m0 0l-5-5m5 5l5-5M5 21h14"/></svg></a>
+        </div>
+        <div class="hero-tags">
+          <span>📍 Hanoi, Vietnam</span>
+          <span>🌐 English (B2)</span>
+          <span>あ Japanese (N4)</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <svg viewBox="0 0 200 200" fill="none">
+          <rect x="20" y="30" width="120" height="90" rx="10" fill="#EAF1FF" stroke="#2563EB" stroke-width="2"/>
+          <circle cx="32" cy="44" r="3" fill="#DC2626"/><circle cx="42" cy="44" r="3" fill="#D97706"/><circle cx="52" cy="44" r="3" fill="#16A34A"/>
+          <rect x="32" y="58" width="60" height="8" rx="3" fill="#C7D7F5"/>
+          <rect x="32" y="72" width="80" height="8" rx="3" fill="#C7D7F5"/>
+          <rect x="32" y="86" width="50" height="8" rx="3" fill="#C7D7F5"/>
+          <circle cx="120" cy="76" r="26" fill="none" stroke="#0F2A4A" stroke-width="3"/>
+          <line x1="139" y1="95" x2="158" y2="114" stroke="#0F2A4A" stroke-width="5" stroke-linecap="round"/>
+          <ellipse cx="118" cy="74" rx="9" ry="7" fill="#DC2626"/>
+          <circle cx="115" cy="71" r="1.6" fill="#fff"/><circle cx="121" cy="71" r="1.6" fill="#fff"/>
+          <rect x="30" y="140" width="14" height="35" rx="2" fill="#2563EB"/>
+          <rect x="50" y="120" width="14" height="55" rx="2" fill="#2563EB" opacity="0.7"/>
+          <rect x="70" y="105" width="14" height="70" rx="2" fill="#2563EB" opacity="0.5"/>
+          <path d="M30 145 L50 128 L70 112 L90 100" stroke="#16A34A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </section>
+
+    <section class="card-section" id="about">
+      <div class="card-head">
+        <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>About Me</h2>
+      </div>
+      <div class="about-grid">
+        <div>
+          <p>I have experience developing web and mobile applications, which helps me understand system architecture and analyze issues efficiently.</p>
+          <p>I apply testing techniques such as test case design, API testing, mobile testing, and regression testing to ensure product quality — practiced through self-initiated QA work on my own development projects.</p>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="stat-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+            <div class="stat-value">7</div>
+            <div class="stat-label">Projects Tested</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="stat-value">9</div>
+            <div class="stat-label">API Endpoints Tested</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="8" y="6" width="8" height="12" rx="4"/><path d="M12 2v4M8 9H4M8 14H4M16 9h4M16 14h4"/></svg></div>
+            <div class="stat-value">4+</div>
+            <div class="stat-label">Defects Identified &amp; Reported</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg></div>
+            <div class="stat-value">4</div>
+            <div class="stat-label">Tech Domains Tested</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-section" id="skills">
+      <div class="card-head">
+        <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>Skills</h2>
+      </div>
+      <div class="skills-grid">
+        <div>
+          <div class="skill-row">
+            <div class="skill-top"><span>Functional Testing</span><span class="level">Practiced</span></div>
+            <div class="bar-track"><div class="bar-fill" data-w="92%"></div></div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-top"><span>API Testing (Postman)</span><span class="level">Practiced</span></div>
+            <div class="bar-track"><div class="bar-fill" data-w="88%"></div></div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-top"><span>Test Case Design &amp; Execution</span><span class="level">Practiced</span></div>
+            <div class="bar-track"><div class="bar-fill" data-w="90%"></div></div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-top"><span>Regression Testing</span><span class="level">Practiced</span></div>
+            <div class="bar-track"><div class="bar-fill" data-w="78%"></div></div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-top"><span>Mobile Application Testing</span><span class="level">Practiced</span></div>
+            <div class="bar-track"><div class="bar-fill" data-w="75%"></div></div>
+          </div>
+        </div>
+        <div class="tools-box">
+          <h3>Tools &amp; Technologies</h3>
+          <div class="tool-item"><span class="tool-dot"></span>Postman</div>
+          <div class="tool-item"><span class="tool-dot"></span>Git &amp; GitHub</div>
+          <div class="tool-item"><span class="tool-dot"></span>Android Studio</div>
+          <div class="tool-item"><span class="tool-dot"></span>VS Code</div>
+          <div class="tool-item"><span class="tool-dot"></span>SQL / SQLite</div>
+          <div class="tool-item"><span class="tool-dot"></span>MongoDB</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-section" id="projects">
+      <div class="card-head">
+        <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Testing Projects</h2>
+        <a class="view-all" href="https://github.com/minh18notexist" target="_blank" rel="noopener">View on GitHub <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="project-grid">
+
+        <div class="project-card">
+          <div class="project-top-row">
+            <div class="project-icon" style="background:var(--accent-light)">🤖</div>
+            <span class="project-tag academic">GRADUATION THESIS</span>
+          </div>
+          <h3>Chatbot Management App</h3>
+          <div class="project-stack">FastAPI · Android (Kotlin) · SQLite</div>
+          <p class="desc">Full-stack system for managing AI-powered chatbots on Facebook Messenger — REST API backend with an Android admin app. Graduation thesis.</p>
+          <div class="project-meta">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>9 REST API endpoints tested</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>3 authentication mechanisms verified</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>API, Integration &amp; UI Testing</span>
+          </div>
+          <a class="view-link" href="https://github.com/minh18notexist/Chatbot-management-app" target="_blank" rel="noopener">View Details →</a>
+        </div>
+
+        <div class="project-card">
+          <div class="project-top-row">
+            <div class="project-icon" style="background:var(--purple-bg)">📚</div>
+            <span class="project-tag personal">PERSONAL</span>
+          </div>
+          <h3>Library Management System</h3>
+          <div class="project-stack">React · Node.js · Express · MongoDB</div>
+          <p class="desc">Full-stack web application for managing books, categories, borrow/return transactions, and users with image upload support.</p>
+          <div class="project-meta">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>CRUD &amp; auth flow testing</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Boundary testing on file upload</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Functional UI Testing</span>
+          </div>
+          <a class="view-link" href="https://github.com/minh18notexist/DEHA.Web" target="_blank" rel="noopener">View Details →</a>
+        </div>
+
+        <div class="project-card">
+          <div class="project-top-row">
+            <div class="project-icon" style="background:var(--amber-bg)">💬</div>
+            <span class="project-tag personal">PERSONAL</span>
+          </div>
+          <h3>Eggster AI — Mobile Chatbot</h3>
+          <div class="project-stack">React 19 · TypeScript · Gemini API</div>
+          <p class="desc">Mobile-first AI chatbot with real-time streaming responses and multimodal (text + image) input.</p>
+          <div class="project-meta">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Streaming response &amp; multimodal testing</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Security defect identified &amp; reported</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>UI/UX &amp; Security Testing</span>
+          </div>
+          <a class="view-link" href="https://github.com/minh18notexist/AI-chatbot-App-Mobile" target="_blank" rel="noopener">View Details →</a>
+        </div>
+
+        <div class="project-card">
+          <div class="project-top-row">
+            <div class="project-icon" style="background:var(--accent-light)">👻</div>
+            <span class="project-tag personal">PERSONAL</span>
+          </div>
+          <h3>Pac-Man Game</h3>
+          <div class="project-stack">HTML · JavaScript · HTML5 Canvas API</div>
+          <p class="desc">Classic arcade-style Pac-Man rebuild with maze navigation, ghost AI, and scoring mechanics on Canvas.</p>
+          <div class="project-meta">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Functional testing of game mechanics &amp; scoring</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>A* pathfinding &amp; ghost state transition testing</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Cross-browser rendering &amp; boundary testing</span>
+          </div>
+          <a class="view-link" href="https://github.com/minh18notexist/Pacman" target="_blank" rel="noopener">View Details →</a>
+        </div>
+
+        <div class="project-card">
+          <div class="project-top-row">
+            <div class="project-icon" style="background:var(--green-bg)">🏃</div>
+            <span class="project-tag personal">PERSONAL</span>
+          </div>
+          <h3>Youth Marathon Registration</h3>
+          <div class="project-stack">PHP (PDO) · MySQL · Bootstrap 4 · jQuery</div>
+          <p class="desc">Full-stack web app for managing Hanoi Marathon event registrations and race results.</p>
+          <div class="project-meta">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Auth &amp; role-based access testing</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Database integrity &amp; SQL injection-safe query testing</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>UI &amp; form validation testing</span>
+          </div>
+          <a class="view-link" href="https://github.com/minh18notexist/Youth_Marathon" target="_blank" rel="noopener">View Details →</a>
+        </div>
+
+        <div class="project-card">
+          <div class="project-top-row">
+            <div class="project-icon" style="background:var(--amber-bg)">🔐</div>
+            <span class="project-tag academic">ACADEMIC · SECURITY COURSE</span>
+          </div>
+          <h3>Network Security: Reverse Shell &amp; Keylogger Study</h3>
+          <div class="project-stack">Python · Socket · Threading · pynput · pyautogui</div>
+          <p class="desc">Course project for Information Security at VJU — academic study of offensive techniques used to build defensive security awareness, conducted under course supervision.</p>
+          <div class="project-meta">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Verified reverse TCP shell command execution &amp; data transfer</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Tested multi-threaded connections &amp; edge cases (disconnects, malformed input)</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Documented findings for a course report on detection strategies</span>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-top-row">
+            <div class="project-icon" style="background:var(--purple-bg)">🚀</div>
+            <span class="project-tag personal">PERSONAL</span>
+          </div>
+          <h3>Space Shooter Android Game</h3>
+          <div class="project-stack">Kotlin · Android Studio · SurfaceView</div>
+          <p class="desc">2D space shooter mobile game with player upgrades, enemy difficulty scaling, and persistent high scores.</p>
+          <div class="project-meta">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Threshold-triggered mechanics testing (upgrades &amp; difficulty)</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>SharedPreferences persistence &amp; edge case testing</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Regression testing after difficulty changes</span>
+          </div>
+          <a class="view-link" href="https://github.com/minh18notexist/SpaceShooter" target="_blank" rel="noopener">View Details →</a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="card-section" id="qa-portfolio">
+      <div class="card-head">
+        <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>QA Portfolio</h2>
+      </div>
+      <div class="resource-grid">
+        <div class="resource-card">
+          <div class="resource-icon" style="background:var(--green-bg)"><svg fill="none" stroke="#16A34A" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+          <h4>Test Cases</h4>
+          <p>Test case sets covering functional, API, and boundary scenarios.</p>
+          <a class="resource-link green" href="https://github.com/minh18notexist/Chatbot-management-app" target="_blank" rel="noopener">View on GitHub →</a>
+        </div>
+        <div class="resource-card">
+          <div class="resource-icon" style="background:var(--red-bg)"><svg fill="none" stroke="#DC2626" stroke-width="2" viewBox="0 0 24 24"><rect x="8" y="6" width="8" height="12" rx="4"/><path d="M12 2v4M8 9H4M8 14H4M16 9h4M16 14h4"/></svg></div>
+          <h4>Bug Reports</h4>
+          <p>17 documented defects with reproduction steps, root cause analysis, and resolution status.</p>
+          <a class="resource-link red" href="Thesis_Bug_Reports.pdf" target="_blank" rel="noopener">View Reports →</a>
+        </div>
+        <div class="resource-card">
+          <div class="resource-icon" style="background:var(--amber-bg)"><svg fill="none" stroke="#D97706" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+          <h4>API Test Collections</h4>
+          <p>Postman collections used for manual API testing and verification.</p>
+          <a class="resource-link amber" href="https://github.com/minh18notexist" target="_blank" rel="noopener">View Collection →</a>
+        </div>
+        <div class="resource-card">
+          <div class="resource-icon" style="background:var(--accent-light)"><svg fill="none" stroke="#2563EB" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
+          <h4>Test Summary Reports</h4>
+          <p>48 structured test cases across 7 functional groups — 100% pass rate, full coverage matrix.</p>
+          <a class="resource-link blue" href="Test_Summary_Report.pdf" target="_blank" rel="noopener">View Reports →</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="two-col">
+      <section class="card-section" id="bug-showcase">
+        <div class="card-head">
+          <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="6" width="8" height="12" rx="4"/><path d="M12 2v4M8 9H4M8 14H4M16 9h4M16 14h4"/></svg>Recent Bug Showcase</h2>
+        </div>
+        <div class="bug-ticket">
+          <div class="bug-ticket-top">
+            <span class="bug-id">BUG-01</span>
+            <h4>Insecure Gemini API key exposure</h4>
+          </div>
+          <div class="bug-field"><span class="label">Module</span><span class="value">Eggster AI — Client build</span></div>
+          <div class="bug-field"><span class="label">Description</span><span class="value">Gemini API key was bundled into the client-side JavaScript build and visible via browser DevTools.</span></div>
+          <div class="bug-field"><span class="label">Impact</span><span class="value">API key could be extracted and misused by any end user.</span></div>
+          <div class="bug-field"><span class="label">Status</span><span class="value"><span class="status-pill">Documented &amp; Recommended</span></span></div>
+        </div>
+        <div class="bug-ticket" style="margin-top:16px;">
+          <div class="bug-ticket-top">
+            <span class="bug-id">BUG-02</span>
+            <h4>Multi-user webhook token collision</h4>
+          </div>
+          <div class="bug-field"><span class="label">Module</span><span class="value">Chatbot Management App — Auth layer</span></div>
+          <div class="bug-field"><span class="label">Description</span><span class="value">A static shared Bearer token design is unsuitable for multi-user access, allowing token reuse across accounts.</span></div>
+          <div class="bug-field"><span class="label">Impact</span><span class="value">Risk of unauthorized cross-account API access.</span></div>
+          <div class="bug-field"><span class="label">Status</span><span class="value"><span class="status-pill">Documented &amp; Recommended</span></span></div>
+        </div>
+      </section>
+
+      <section class="card-section" id="stlc">
+        <div class="card-head">
+          <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Testing Process (STLC)</h2>
+        </div>
+        <div class="stlc-track">
+          <div class="stlc-step"><div class="stlc-icon">01</div><div class="step-name">Requirement<br>Review</div></div>
+          <div class="stlc-step"><div class="stlc-icon">02</div><div class="step-name">Test Scenario<br>Design</div></div>
+          <div class="stlc-step"><div class="stlc-icon">03</div><div class="step-name">Test Case<br>Design</div></div>
+          <div class="stlc-step"><div class="stlc-icon">04</div><div class="step-name">Test<br>Execution</div></div>
+          <div class="stlc-step"><div class="stlc-icon">05</div><div class="step-name">Bug<br>Reporting</div></div>
+          <div class="stlc-step"><div class="stlc-icon">06</div><div class="step-name">Regression<br>Testing</div></div>
+          <div class="stlc-step"><div class="stlc-icon">07</div><div class="step-name">Test Summary<br>Report</div></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card-section" id="education">
+      <div class="card-head">
+        <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>Education &amp; Certifications</h2>
+      </div>
+      <div class="bug-field" style="margin-bottom:6px;"><span class="label" style="min-width:0;font-size:0.95rem;color:var(--navy);font-weight:700;">Vietnam Japan University — VNU Hanoi</span></div>
+      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:4px;">Bachelor of Science in Computer Science · 2022 – 2026</p>
+      <p style="color:var(--muted);font-size:0.9rem;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">🏅 FutureLearn — Computer Networking Fundamentals (2023)</p>
+    </section>
+
+    <section class="contact-card" id="contact">
+      <div>
+        <h2>Let's Connect</h2>
+        <p>I'm always open to discussing new opportunities and internship roles in software testing.</p>
+        <div class="contact-info">
+          <span>✉ anosvoldigodx123@gmail.com</span>
+          <span>📞 0338 274 975</span>
+          <span>📍 Hanoi, Vietnam</span>
+        </div>
+      </div>
+      <div class="contact-socials">
+        <a href="https://github.com/minh18notexist" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.25.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.7 2.6 1.2 3.2.9.1-.7.4-1.2.7-1.5-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2.9-.3 1.9-.4 2.9-.4s2 .1 2.9.4c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .35.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.65 18.35.5 12 .5z"/></svg></a>
+        <a href="https://www.linkedin.com/in/minh-nguyen-ngoc-6241b3354/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5a5 5 0 00-5 5v14a5 5 0 005 5h14a5 5 0 005-5V5a5 5 0 00-5-5zM8 19H5V9h3zM6.5 7.7A1.7 1.7 0 118.2 6a1.7 1.7 0 01-1.7 1.7zM20 19h-3v-5.4c0-1.3-.5-2.2-1.6-2.2-.9 0-1.4.6-1.6 1.2-.1.2-.1.5-.1.8V19h-3s.1-9 0-10h3v1.4c.4-.6 1.1-1.5 2.8-1.5 2 0 3.5 1.3 3.5 4.2z"/></svg></a>
+        <a href="mailto:anosvoldigodx123@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></a>
+      </div>
+    </section>
+
+    <div class="footer-note">© 2026 Nguyen Ngoc Minh — Built with care for quality.</div>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.bar-fill').forEach(function(bar) {
+    var target = bar.getAttribute('data-w');
+    setTimeout(function() { bar.style.width = target; }, 200);
+  });
+
+  var toggle = document.getElementById('menuToggle');
+  var sidebar = document.getElementById('sidebar');
+  toggle.addEventListener('click', function() {
+    sidebar.classList.toggle('open');
+  });
+  document.querySelectorAll('.nav-list a').forEach(function(link) {
+    link.addEventListener('click', function() { sidebar.classList.remove('open'); });
+  });
+</script>
+
+</body>
+</html>
